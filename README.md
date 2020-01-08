@@ -66,6 +66,119 @@ package.json
 }
 ```
 
+### Integrate react-app-rewired
+
+#### Install packages
+
+```
+yarn add -D react-app-rewired customize-cra
+```
+
+#### Add config
+
+./config-overrides.js
+
+```js
+const { useBabelRc, override, useEslintRc } = require('customize-cra');
+
+module.exports = override(useBabelRc(), useEslintRc());
+```
+
+#### Modify package.json
+
+./package.json
+
+```json
+{
+    ...
+    "scripts": {
+        "start": "react-app-rewired start",
+        "build": "react-app-rewired build",
+        "test": "react-app-rewired test --env=jsdom",
+        "eject": "react-scripts eject"
+    }
+}
+```
+
+#### Create babel configuration
+
+./.babelrc
+
+```
+{
+  "plugins":[]
+}
+```
+
+### Integrate tailwindcss into project
+
+#### Install packages
+
+```
+yarn add tailwindcss styled-components
+```
+
+```
+yarn add babel-plugin-styled-components -D
+```
+
+#### Init tailwind
+
+```
+npx tailwindcss init
+```
+
+#### Update .babelrc
+
+```json
+{
+  "plugins": [
+    "styled-components",
+    [
+      "tailwind-components",
+      {
+        "config": "./tailwind.config.js",
+        "format": "auto"
+      },
+      "react-hot-loader/babel"
+    ]
+  ]
+}
+```
+
+#### Modify config-overrides.js
+
+```js
+const {
+  override,
+  addPostcssPlugins,
+  addBabelPlugins,
+} = require('customize-cra');
+```
+
+```js
+module.exports = override(
+  addBabelPlugins([
+    'tailwind-components',
+    {
+      config: './tailwind.config.js',
+      format: 'auto',
+    },
+  ]),
+  addPostcssPlugins([require('tailwindcss')('./tailwind.config.js')]),
+);
+```
+
+#### Append tailwindcss into global css
+
+./src/index.css
+
+```
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+```
+
 ## Available Scripts
 
 In the project directory, you can run:
@@ -108,3 +221,7 @@ You don’t have to ever use `eject`. The curated feature set is suitable for sm
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
 To learn React, check out the [React documentation](https://reactjs.org/).
+
+```
+
+```
