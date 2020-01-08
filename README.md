@@ -1,4 +1,70 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## How to init a frontend project
+
+### Init project
+
+New project with [Create React App](https://github.com/facebook/create-react-app).
+
+```
+npx create-react-app --typescript <projectName>
+```
+
+### Setup development environment
+
+#### Install packages
+
+```
+yarn add husky lint-staged prettier -D
+```
+
+#### Setup prettier
+
+Add prettier config
+./.prettierrc
+
+```json
+{
+  "printWidth": 80,
+  "tabWidth": 2,
+  "useTabs": false,
+  "semi": true,
+  "singleQuote": true,
+  "trailingComma": "all"
+}
+```
+
+./.prettierignore
+
+```
+build/
+coverage/
+__snapshots__/
+node_modules/
+package-lock.json
+yarn.lock
+package.json
+```
+
+#### Setup husky to run prettier before commit
+
+package.json
+
+```json
+{
+  ...
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "**/src/**/*.{js,jsx,ts,tsx,json,css,scss,md}": [
+      "prettier --write",
+      "git add"
+    ]
+  },
+}
+```
 
 ## Available Scripts
 
